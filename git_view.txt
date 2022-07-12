@@ -1,0 +1,18 @@
+* Git Files
+.git - Main dir for git
+.gitattributes - Set attributes
+.gitignore - Ignore given files
+.gitkeep - Keep empty dir for commit
+
+Subfiles:
+.git/ORIG_HEAD - file with commit id where HEAD was previously located
+.git/logs/<branch name> - history of given branch
+.git/rr-cashe - rerere cahse
+
+
+* Git Setup (After downloading)
+Do "git init" in project dir
+Configure .gitattributes (and .gitignore if needed)
+
+*Some notes
+- No dot at the end of the commit preview message is used

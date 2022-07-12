@@ -1,0 +1,351 @@
+* Commands
+Open git bash in project dir to
+be able to execute all the commands
+that are written below.
+
+
+** Git Commands
+
+- git config [<params>] <key> <value> - configure variable
+params:
+	--unset - remove given key in config
+	(Usage example: git config --unset user.email)
+	
+	--remove-section - remove whole given section of keys
+	(Usage example: git config --remove-section user)
+
+	--list - display config
+	(Usage example: git config --list)
+
+	one of the next params can be set:
+		-- local (DEFAULT. Will write key and value to the local (project) config)
+		-- global (Will write key and value to the global config
+		           (each project can use this config))
+		-- system (Will write key and value to the system config
+		           (each project can use this config))
+	(Usage examples: git config --local --remove-section user - remove local section
+			 git config --global --list - display global config)
+	
+	-h - list all possible command's params
+	(Usage example: git config -h)
+
+	--add - to set multiple config files
+	git config -add include.path <path>
+
+
+- git help <command> - open command's manual
+(Usage example: git help config)
+
+
+- git status - show the "index", "untracked" files and current branch
+
+
+- git add [<params>] <file/dir path> - add file/dir to index
+params:
+	--force or -f - force to add ignored file/dir
+	-p - add some of the changes in file to index and leave other changes untracked
+	(Usage example: git add -p index.html)
+
+(Usage examples:
+	git add index.html - add index.html to index;
+	git add -A - add whole project changes to index;
+	git add . - add whole project changes from current dir to index)sss
+
+
+- git reset [<params>] ... - see below:
+~ git reset --hard - see params
+~ git reset --hard <commit id/branch name/tag name> - see params
+~ git reset --soft <commit id/branch name/tag name> - see params
+params:
+	--hard <commit id/branch name/tag name> - move current branch and HEAD to <commit id/branch name/tag name>
+	(DEFAULT - HEAD) and reset "index" and "working dir"
+
+	--mixed <commit id/branch name/tag name> (DEFAULT) - move current branch and HEAD to <commit id/branch name/tag name>
+	(DEFAULT - HEAD) and reset only "index"
+	--mixed <file/dir> - delete file/dir from "index"
+
+	--keep <commit id/branch name/tag name> - move current branch and HEAD to <commit id/branch name/tag name>
+	(DEFAULT - HEAD) and "--hard" reset, but keep uncommited changes in "working dir"
+
+	--soft <commit id/branch name/tag name> - move current branch and HEAD to <commit id/branch name/tag name>
+	(DEFAULT - HEAD) and DO NOT reset "index" and "working dir"
+
+	--merge - cancel the merge (use this when "git merge --squash ... " was used)
+
+
+- git clean [<params>] - remove newly created untracked files
+params:
+	-d - delete files and dirs
+
+	-x - delete ignores files
+
+	-f - delete with force
+
+
+- git rm [<params>] <files/dirs>  - remove filed/dirs from "working dir" and add changes to "index"
+params:
+	-r - for removing dirs
+	--cashed - remove files'/dirs' from "index" (The same as making files/dirs untracked)
+	--force or -f - force to delete untracked files/dirs
+
+
+- git mv <file/dir old name> <file/dir new name> - rename file/dir and add changes to "index"
+(Usage example:
+	git mv index.html main.html - rename index.html to main.html)
+ 
+
+
+- git commit [<params>] [<files/dirs>] - make a commit OR add file/dir to "index" and commit it
+params:
+	--author - set author's name and email
+	(Usage example: git commit --author "Sergei Grigorev <serg@example.com>")
+	
+	-m <"message"> - Use small message to do the commit
+	(Usage example: git commit -m "Bugs fixed")
+
+	--all or -a - add all the changes from "working dir" to "index" and make a commit.
+	(WARNING! New created files/dirs will not be commited.
+	If new files/dirs have to be commited, use alias:
+	git config alias.commitall "!git add .; git commit" OR git config alias.commitall "!git add -A; git commit"
+	Then use: git commitall <params>)
+	
+	-am - the same as "-a -m"
+
+	-c <commit id/branch name/tag name> - copy description from <commit id/branch name/tag name>
+	and edit it
+
+	-C <commit id/branch name/tag name> - use description from <commit id/branch name/tag name>
+	(Author and date will stay the same)
+
+	--amend - replace current commit with new commit
+
+	--fixup=<treePath> - make commit with small fix from <treePath>
+	(than should be used "git rebase -i --autosquash ..." to apply fixup)
+
+
+- git merge [<params>] <treePath> - merge <treePath> with current branch (recursive strategy)
+~ git merge [<params>] <treePath1> <treePath2> ... - merge multiple commits (octopus strategy)
+params:
+	--abort - cancel merge and save uncommited files
+
+	--continue - finish merge
+
+	--log - add text to description from merging commits
+
+	--no-commit - do not do the commit after merging
+
+	--ff - use fast-forward
+
+	--squash - merge two commits, but do not connect merged commit with the second parent
+
+	-Xours - use "ours" files when merging
+
+	-Xtheirs - use "theirs" files when merging
+
+	-Xno-renames - do not track renamed files
+
+	-Xfind-renames=<n> - git will assume that file is renamed, if it doesn't differ at least n% (DEFAULT - n=50)	
+
+	-Xsubtree=<path> - merge with subtree which is in given <path>
+	--allow-unrelated-histories - if the previous option doesn't work
+
+
+- git cherry-pick [<params>] <treePaths> - copy the commits to current branch
+params:
+	-x - add information about the commit where it was copied from
+
+	--abort - cancel cherry-pick (remove all the changes)
+
+	--continue - finish cherry-pick
+
+	--quit - quit cherry-pick (save commits, that were successfully added)
+
+	--no-commit - edit the changes before commit
+
+
+- git revert [<params>] <treePaths> - create commmited with cancelled changes on current branch
+params:
+	-m <n> - if n == 1: revert changes from the first parent. If n == 2: revert changes from the second parent
+
+
+- git rebase [<params>] <treePath> - rebase current branch on <treePath>
+~ git rebase --onto <treePath1> <treePath2> - 
+params:
+	--abort - cancel rebase (remove all the changes)
+
+	--continue - finish rebase
+
+	--quit - quit rebase (save commits, that were successfully added)
+
+	-x "cmd command" - use cmd command for testing the project before rebasing
+
+	--onto <treePath1> <treePath2> - move current branch which starts from <treePath1> to <treePath2>
+
+	-p - preserve merges (do not apply, if merged files had conflicts)
+
+	-i - interactive rebase
+	--edit-todo - edit todo rebase list
+
+
+- git show <branch name/commit id/ tag name> [<params>] - show commit changes on <commit id>
+or on branch with <branch name> (DEFAULT - HEAD) or on tag with <tag name>
+
+~ git show <branch name/commit id/tag name>:<file path> - show full file from <commit id>
+or from commit which is on branch with <branch name> or on tag with <tag name>
+
+~ git show :<file path> - show full file from "index"
+~ git show :/<text> - show the newest commit with <text> in the description
+params:
+	--pretty=fuller - display more information
+
+	--quiet  - display less information
+
+
+- git log <treePath1> <treePath2> ... [<params>] [<paths>] - show all the changes of paths (DEFAULT - all the commits)
+starting from <treePath1>, salso starting from <treePath2>, etc... (DEFAULT - HEAD)
+
+params:
+	--oneline - show less information
+
+	-g - will show more information (same as "git reflog")
+
+	--graph - graph the tree
+
+	--all - show all the commits
+
+	--grep <regular expression> - show all the matches with <regular expression>
+	-i - register doesn't matter
+	-p - show file inside changes
+
+	-G"<regular expression>" - show all the files, where some text written that matches <regular expression>
+
+	-L "/<regular expression 1>/","/regular expression 2/":<file> -
+	show file changes with given fragment as regular expression
+
+	--before <date> - show commits before <date>
+	--after <date> - show commits after <date>
+
+	--first-parent - show only the first parent's commits
+
+	--cherry-mark - show equal commits
+	--left-only - show only left commits
+	--right-only - show only right commits
+
+	--cherry - = "--cherry-mark -- right-only"
+
+
+- git reflog <branch name> [<params>] - show the history of given branch (DEFAULT - HEAD)
+params:
+	--date=iso - show date
+
+	--no-decorate - show no branch refs
+
+
+- git diff [<params>] ... - see below:
+~ git diff <treePath1> <TreePath2> OR git diff <treePath1>..<treePath2> - show the difference between two commits
+~ git diff <treePath1>...<treePath2> - show the difference between <treePath2> commit and the commit
+which is a parent for these two commits
+~ git diff <treePath> - show the difference between <treePath> commit and "working dir"
+~ git diff - show the difference between "working dir" and "index" OR show new changes in "working dir"
+~ git diff --cashed - see params
+~ git diff <commit1>:<path1> <commit2>:<path2> - show the difference between <path1> and <path2> in given commits
+You can add <file/dir path1> <file/dir path2> ... to show the difference between files/dirs
+params:
+	--cashed - show the difference between "index" and last commit
+
+	--name-only - show only files' names that differ
+
+	-- - to be convinient that file/dir name is used
+
+	--word-diff - show words' difference
+
+	--color-words - show words' difference with colors
+
+
+- git branch [<branch name> [<commit id/branch name/tag name>]] - show current branch (where HEAD is located) and other branches OR
+if <branch name> is specified, the new branch will be created (where HEAD is located) OR
+if <branch name> and <commit id/branch name/tag name> are specified, the new branch wil be created (if it doesn't exist) where <commit id/branch name/tag name> is located
+or replace the branch (if it exists) to <commit id/branch name/tag name> 
+params:
+	-v - see more info about current branch
+
+	--force or -f - is used to force to replace branch to the new location
+
+	-d - delete branch
+
+	-D - force to delete branch
+
+	--merged - see merged branches
+	--no-merge - see no merged branches
+
+
+- git checkout [<params>] ...  - see below:
+~ git checkout <branch name/commit id> - replace HEAD to given branch/commit
+~ git checkout <branch name/commit id> <file/dir path> - copy file/dir from branch/commit to "index" and "working dir"
+~ git checkout <file/dir path> - copy file/dir from "index" to "working dir"
+~ git checkout -b <branch name> [<Commit id/Branch name>] - see params
+~ git checkout -B <branch name> <Commit id/Branch name> - see params
+params:
+	-b - create new branch with given <branch name> and replace HEAD to this branch
+	(By default this branch will be located on current commit, but if <Commit id/Branch name> is specified, it will be located there)
+
+	-B - replace branch which has  <branch name>  and exists to given <Commit id/Branch name> and replace HEAD to this branch
+
+	--force or -f - force to replace HEAD to given branch (WARNING! Untracked files/dirs will not be saved)
+
+	-- - is used before <file/dir path>, when you want to get file/dir, but the branch with the same name exists
+	
+	(When merging)
+	--ours <path> - show file on current branch
+	--theirs <path> - show file on merge branch
+	--base <path> - show file on base commit
+
+	--merge <path> - show "ours" and "theirs" file
+
+ 
+(Usage examples: 
+git checkout feature - go to "feature" branch
+git checkout -f HEAD OR git checkout -f - cancel all the changes)
+
+
+- git rerere forget <file> - remove file from rerere cashe
+
+
+- git tag [<params>] ... - see below:
+- git tag - display the list of tags
+- git tag <tag name> <commit id/branch name> - create tag on <commit id> or on branch with <branch name> (DEFAULT - HEAD)
+params:
+	-n<k> - display the list of tags and display k rows of commit's description or 1 row of description if k is not specified
+
+	-l <mask> - display the list of tags that were found with mask
+	(Usage example: git tag -l "v.1.*" - search all tags  that starts with "v.1.")
+	
+	-d <tag1> [<tag2> ...] - delete tags
+	(Usage examples: git tag -d v1.1.0 v1.1.1)
+
+	-a - add description to tag
+
+	-m (when -a is used) - use one-line description
+
+
+- git describe <commit id/branch name> - show tag located on <commit id/branch name>
+- git describe - show the nearest tag starting from HEAD
+
+
+- git stash - Use this when you want to check another branch and save the changes
+~ git stash pop - Use this when you return to your previous branch to get all the changes back
+
+- git gc - garbage collection and optimization
+
+- git fsck --unreachable - show all unreachable commits
+
+
+** Additional Commands
+- cat <file path> (Display the file)
+(Usage example: cat .git/config)
+
+- <path>/rerere-train.sh [<params>] [<file>] - train rerere using file
+params:
+	--all - train using all files
+
+

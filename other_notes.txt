@@ -1,0 +1,62 @@
+*  When git config is used:
+
+Should be set:
+	Your identity:
+	git config user.name <"Your name">
+	git config user.email <"Your email">
+	
+	core.autocrlf:
+	git config core.autocrlf <value>
+	Possible values:
+		true - write: CRLF -> LF; read: LF -> CRLF
+		(It's good, if you are working on Windows, but your teammates are on Unix-like systems)
+		input - write: CRLF -> LF; read: the same as it was written
+		(It's good, if you are working on Unix-like systems, but your teammates are on Windows system)
+		false - write and read without changes
+		(It's good, if all of your team is working on one-type system)
+
+
+Can be set:
+	alias - command's or commands' shortcut:
+	git config alias.<shortcut name> <"command"> - for one command
+	git config alias.<shortcut name> <"!command1; command2..."> - for multiple commands
+	(Usage examples:
+	git config alias.configlist "config --list --global"
+	Now, instead of "git config --list --global" we can use "git configlist"
+	
+	git config alias.sayHi "!echo 'Hi'; echo 'there'"
+	git config alias.fast-commit "!git add .; git commit")
+
+
+	include.path is used to set config from particular file:
+	git config include.path <path>
+
+	merge.conflictStyle can be set to "diff3" to also show base commit
+	when conflict occurs
+	
+	merge.ff - disable fast-forward merge
+
+	rerere.enabled <false/true> - enable/disable rerere
+
+
+* Branch names:
+You can use @ insted of HEAD
+
+
+If you have <branch name>~ or <commit id>~ it will show previous commit (with <branch name> or <commit id> context)
+(Example:  @~ is the previous commit starting from HEAD)
+
+You can use n "~" or "~<n>" to go on commit which was created n commits ago
+(Examples: @~~~ is the commit which was created 3 commits ago starting from HEAD
+	fix~2 is the commit which was created 2 commits ago starting from "fix")
+
+You can use @{-n} to go to commit, where checkout was executed which was done n checkouts ago
+Type "git reflog to see checkouts"
+(Examples: @{-1} is the commit where previous checkout was executed)
+
+If you use "reflog" git command to get commit
+(Examples: HEAD@{1}, master@{<date there>}, etc...)
+
+
+
+
